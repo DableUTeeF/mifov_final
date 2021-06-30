@@ -38,8 +38,8 @@ result = inference_detector(model, image)
  * The `mmeval.py` is for predicting all images in `test.json`(download link above)
  and preform mAP evaluation with IOU 0.3 - 0.9. It prints the results and output
  to a json file.
-   * Note that there's a comment at line 117. Uncomment that will save all prediction
-   in the json alnog with the results.
+   * There's a comment at line 117. Uncomment that will save all prediction
+   in the json along with the results.
 
 # The output
 The `result` from `inference_detector` will be a list of `ndarray` arrange by class.
