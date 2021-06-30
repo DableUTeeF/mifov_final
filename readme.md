@@ -13,13 +13,23 @@ https://drive.google.com/drive/folders/1fVpx032B1U9jzCvKc_I0TU2peBf9o02C?usp=sha
      are rather new. (I'm using 2.13.0)
      2. The path to weight folders
      3. Output path
-   * The `config` is for the corresponding config files and weights, and also.
+   * The `config` is for the corresponding config files and weights, and also
    the output folder's name. 
    You can refer to both `mmpredict` and `mmeval` for which weight 
    should be used with which config. The output folder's name should not be duplicated.
    
  * `mmpredict_field.py` is simpler version of `mmpredict`. One weight one config.
  Predict from a folder and output to a folder.
+ ## Note
+ All these files use `filename` when calling `inference_detector()` but actually
+ you can put `ndarray` in instead of string too. Like
+ ```
+cfg = Config.fromfile('/home/palm/PycharmProjects/pig/mmdetection/configs/gfl/gfl_r50_fpn_mstrain_2x_coco.py')
+cfg.model.bbox_head.num_classes = 2
+model = init_detector(cfg, '/media/palm/BiggerData/algea/weights/gfl_r50/epoch_24.pth', device='cuda')
+image = cv2.imread('ov.png')
+result = inference_detector(model, image)
+ ```
 
 # Training
  * Colab example https://colab.research.google.com/drive/13G_ED9aeuskYh7JbU28D1lAHYkq41DZ9?usp=sharing
@@ -30,4 +40,12 @@ https://drive.google.com/drive/folders/1fVpx032B1U9jzCvKc_I0TU2peBf9o02C?usp=sha
  to a json file.
    * Note that there's a comment at line 117. Uncomment that will save all prediction
    in the json alnog with the results.
-   
+
+# The output
+The `result` from `inference_detector` will be a list of `ndarray` arrange by class.
+In the array are the bounding boxes in format `(x1, y1, x2, y2, score)`.
+
+For example everything in `result[0]` will be MIF, and likewise everything in
+`result[1]` will be OV. 
+
+The boxes are in `float32` but they are the actual pixel of the input image not in 0-1.
