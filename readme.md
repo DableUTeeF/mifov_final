@@ -1,6 +1,5 @@
 # Download the weights here
-https://drive.google.com/drive/folders/1fVpx032B1U9jzCvKc_I0TU2peBf9o02C?usp=sharing
-
+https://drive.google.com/drive/folders/1SYETX8p84YmaOszo_vr0YWfhUl02_Cn4?usp=sharing
 # The dataset
  * Train: https://drive.google.com/drive/folders/1C253KHa8D6-moFILSEF-fpOSCtFmlqRv?usp=sharing
  * Val: https://drive.google.com/drive/folders/1VMxXUNnlTNnpLP3Xzku_7cc7FnfMSmhD?usp=sharing
