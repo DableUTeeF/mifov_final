@@ -14,31 +14,35 @@ import os
 if __name__ == '__main__':
     dataset = json.load(open('/home/palm/PycharmProjects/mmdetection/anns/test.json'))
     filedir = '/media/palm/data/MicroAlgae/khonkan/ภาพใข่จากขอนแก่น-20201006T164426Z-001/images'
-    path = ('/home/palm/PycharmProjects/pig/mmdetection/configs/', '/media/palm/BiggerData/algea/weights/', '/media/palm/BiggerData/algea/predict_2')
+    path = (
+        '/home/palm/PycharmProjects/pig/mmdetection/configs/',
+        '/media/palm/BiggerData/algea/weights/',
+        '/media/palm/BiggerData/algea/predict_2',
+    )
     configs = [
         ('cascade_rcnn/cascade_rcnn_r101_fpn_1x_coco.py',
-         'cascade_101_lab_1/epoch_20.pth',
+         'cascade_r101/epoch_20.pth',
          'cascade_rcnn_r101'),
         ('cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.py',
          'cascade_r50/epoch_20.pth',
          'cascade_rcnn_r50'),
         ('detr/detr_r50_8x2_150e_coco.py',
-         'detr_lab_4/epoch_30.pth',
+         'detr_r50/epoch_30.pth',
          'detr_r50'),
         ('retinanet/retinanet_r50_fpn_1x_coco.py',
-         'retinanet_lab_1/epoch_23.pth',
+         'retinanet_r50/epoch_23.pth',
          'retinanet_r50'),
         ('retinanet/retinanet_r101_fpn_1x_coco.py',
          'retinanet_r101/epoch_24.pth',
          'retinanet_r101'),
         ('faster_rcnn/faster_rcnn_r101_fpn_1x_coco.py',
-         'rcnn_lab_1/epoch_30.pth',
+         'rcnn_r101/epoch_30.pth',
          'rcnn_r101'),
         ('faster_rcnn/faster_rcnn_r50_caffe_fpn_mstrain_2x_coco.py',
          'rcnn_r50/epoch_24.pth',
          'rcnn_r50'),
         ('yolo/yolov3_d53_mstrain-608_273e_coco.py',
-         'yolov3_lab_1/epoch_30.pth',
+         'yolov3_d53/epoch_30.pth',
          'yolo_d53'),
         ('deformable_detr/deformable_detr_r50_16x2_50e_coco.py',
          'deformdetr/epoch_50.pth',
@@ -87,7 +91,7 @@ if __name__ == '__main__':
         else:
             cfg.model.bbox_head.num_classes = 2
 
-        # Build the detector
+        # JSON
         model = init_detector(cfg, weight, device='cuda')
         out_path = os.path.join(path[2], name, 'lab')
         os.makedirs(out_path, exist_ok=True)
@@ -101,6 +105,7 @@ if __name__ == '__main__':
                                      os.path.basename(data['filename'])),
                         img)
 
+        # Folder
         out_path = os.path.join(path[2], name, 'kk')
         os.makedirs(out_path, exist_ok=True)
         for file in os.listdir(filedir):
