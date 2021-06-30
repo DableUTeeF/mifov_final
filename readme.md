@@ -20,6 +20,10 @@ https://drive.google.com/drive/folders/1fVpx032B1U9jzCvKc_I0TU2peBf9o02C?usp=sha
    
  * `mmpredict_field.py` is simpler version of `mmpredict`. One weight one config.
  Predict from a folder and output to a folder.
+
+# Training
+ * Colab example https://colab.research.google.com/drive/13G_ED9aeuskYh7JbU28D1lAHYkq41DZ9?usp=sharing
+ 
 # Evaluation
  * The `mmeval.py` is for predicting all images in `test.json`(download link above)
  and preform mAP evaluation with IOU 0.3 - 0.9. It prints the results and output
