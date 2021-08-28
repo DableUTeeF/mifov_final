@@ -17,32 +17,32 @@ if __name__ == '__main__':
     path = (
         '/home/palm/PycharmProjects/pig/mmdetection/configs/',
         '/media/palm/BiggerData/algea/weights/',
-        '/media/palm/BiggerData/algea/predict_2',
+        '/media/palm/BiggerData/algea/predict_3',
     )
     configs = [
         ('cascade_rcnn/cascade_rcnn_r101_fpn_1x_coco.py',
-         'cascade_r101/epoch_20.pth',
+         'cascade_101_lab_1/epoch_20.pth',
          'cascade_rcnn_r101'),
         ('cascade_rcnn/cascade_rcnn_r50_fpn_1x_coco.py',
          'cascade_r50/epoch_20.pth',
          'cascade_rcnn_r50'),
         ('detr/detr_r50_8x2_150e_coco.py',
-         'detr_r50/epoch_30.pth',
+         'detr_lab_4/epoch_30.pth',
          'detr_r50'),
         ('retinanet/retinanet_r50_fpn_1x_coco.py',
-         'retinanet_r50/epoch_23.pth',
+         'retinanet_lab_1/epoch_23.pth',
          'retinanet_r50'),
         ('retinanet/retinanet_r101_fpn_1x_coco.py',
          'retinanet_r101/epoch_24.pth',
          'retinanet_r101'),
         ('faster_rcnn/faster_rcnn_r101_fpn_1x_coco.py',
-         'rcnn_r101/epoch_30.pth',
+         'rcnn_lab_1/epoch_30.pth',
          'rcnn_r101'),
         ('faster_rcnn/faster_rcnn_r50_caffe_fpn_mstrain_2x_coco.py',
          'rcnn_r50/epoch_24.pth',
          'rcnn_r50'),
         ('yolo/yolov3_d53_mstrain-608_273e_coco.py',
-         'yolov3_d53/epoch_30.pth',
+         'yolov3_lab_1/epoch_30.pth',
          'yolo_d53'),
         ('deformable_detr/deformable_detr_r50_16x2_50e_coco.py',
          'deformdetr/epoch_50.pth',
@@ -107,17 +107,33 @@ if __name__ == '__main__':
 
         # Folder
         out_path = os.path.join(path[2], name, 'kk')
+        out_path_inv = os.path.join(path[2], name, 'kk_inv')
         os.makedirs(out_path, exist_ok=True)
+        os.makedirs(out_path_inv, exist_ok=True)
         for file in os.listdir(filedir):
             filename = os.path.join(filedir, file)
+            image = cv2.imread(filename)
 
             # test a single image
-            result = inference_detector(model, filename)
+            result = inference_detector(model, image)
             # show the results
             img = model.show_result(filename,
                                     result,
                                     score_thr=0.3, show=False)
             # print(result)
             cv2.imwrite(os.path.join(out_path,
+                                     file),
+                        img)
+
+            image = cv2.imread(filename)[..., ::-1]
+
+            # test a single image
+            result = inference_detector(model, image)
+            # show the results
+            img = model.show_result(filename,
+                                    result,
+                                    score_thr=0.3, show=False)
+            # print(result)
+            cv2.imwrite(os.path.join(out_path_inv,
                                      file),
                         img)
