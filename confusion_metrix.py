@@ -86,7 +86,7 @@ if __name__ == '__main__':
     classes = {'mif': 0, 'ov': 1, 'bg': 2}
     for i, data in enumerate(dataset):
         result = inference_detector(model, data['filename'])
-        cf = confusion_metrix(result, data['ann'])
+        cf = confusion_metrix(result, data['ann'], confidence_threshold=0.3, iou_threshold=0.5)
         npcf = cf_dict2np(cf)
         cfs += npcf
         print(cfs)
