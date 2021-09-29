@@ -14,14 +14,32 @@ if __name__ == '__main__':
         cv2.imshow('a', image[605*s:670*s, 635*s:730*s])
 
         # true
-        add_bbox(image, bbox[0]*s, 'true', (0, 180, 0), show_txt=False)
+        add_bbox(image, bbox[0]*s, 'true', (0, 180, 0), show_txt=False)  # 49, 28
         print('a')
 
         # predict
-        # add_bbox(image, [658*s, 626*s, 706*s, 652*s], '0.9', (180, 0, 0), pos='bot', show_txt=False)
-        # add_bbox(image, [658*s, 626*s, 700*s, 649*s], '0.7', (100, 255, 255), pos='bot', show_txt=False)
-        add_bbox(image, [653*s, 619*s, 704*s, 647*s], '0.5', (100, 100, 255), pos='bot', show_txt=False)
-        # add_bbox(image, [658*s, 626*s, 688*s, 640*s], '0.3', (255, 50, 180), pos='bot', show_txt=False)
+        add_bbox(image, [657*s, 625*s, 706*s, 653*s], '0.9', (180, 0, 0), pos='bot', show_txt=False)
+        add_bbox(image, [656*s, 622*s, 705*s, 650*s], '0.7', (200, 180, 0), pos='bot', show_txt=False)
+        add_bbox(image, [654*s, 619*s, 703*s, 647*s], '0.5', (100, 100, 255), pos='bot', show_txt=False)
+        add_bbox(image, [649*s, 613*s, 700*s, 641*s], '0.3', (255, 50, 180), pos='bot', show_txt=False)
 
-        cv2.imshow('b', image[605*s:670*s, 635*s:730*s])
+        # add annotation
+
+        image = image[605*s:670*s, 635*s:730*s]
+        image[140:193, 205:280, :] = 255
+
+        image = cv2.line(image, (210, 145), (235, 145), (255, 50, 180))
+        image = cv2.putText(image, 'iou=0.3', (240, 148), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
+        image = cv2.line(image, (210, 155), (235, 155), (100, 100, 255))
+        image = cv2.putText(image, 'iou=0.5', (240, 158), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
+        image = cv2.line(image, (210, 165), (235, 165), (200, 180, 0))
+        image = cv2.putText(image, 'iou=0.7', (240, 168), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
+        image = cv2.line(image, (210, 175), (235, 175), (180, 0, 0))
+        image = cv2.putText(image, 'iou=0.9', (240, 178), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
+        image = cv2.line(image, (210, 185), (235, 185), (0, 180, 0))
+        image = cv2.putText(image, 'gt', (240, 188), cv2.FONT_HERSHEY_SIMPLEX, 0.3, (0, 0, 0), thickness=1, lineType=cv2.LINE_AA)
+
+        cv2.imshow('b', image)
         cv2.waitKey()
+
+        break

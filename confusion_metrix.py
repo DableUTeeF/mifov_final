@@ -68,7 +68,14 @@ def confusion_metrix(results: list, ann: dict, confidence_threshold: float=0.3, 
             predicts[classes[ann_class]]['bg'] += 1
     return predicts
 
+
 def cf_dict2np(cf):
+    """
+     p|p|p
+    t
+    t
+    t
+    """
     npcf = np.zeros((3, 3), dtype='uint32')
     for gt_class in cf:
         gt = cf[gt_class]
@@ -77,11 +84,12 @@ def cf_dict2np(cf):
             npcf[gt_idx, classes[pd_class]] += gt[pd_class]
     return npcf
 
+
 if __name__ == '__main__':
     dataset = json.load(open('/home/palm/PycharmProjects/mmdetection/anns/test.json'))
-    cfg = Config.fromfile('/home/palm/PycharmProjects/pig/mmdetection/configs/gfl/gfl_r50_fpn_mstrain_2x_coco.py')
-    cfg.model.bbox_head.num_classes = 2
-    model = init_detector(cfg, '/media/palm/BiggerData/algea/weights/gfl_r50/epoch_24.pth', device='cuda')
+    cfg = Config.fromfile('/home/palm/PycharmProjects/pig/mmdetection/configs/cascade_rcnn/cascade_rcnn_r101_fpn_1x_coco.py')
+    # cfg.model.bbox_head.num_classes = 2
+    model = init_detector(cfg, '/media/palm/BiggerData/algea/weights/cascade_101_lab_1/epoch_20.pth', device='cuda')
     cfs = np.zeros((3, 3), dtype='uint32')  # [gt, pd]
     classes = {'mif': 0, 'ov': 1, 'bg': 2}
     for i, data in enumerate(dataset):

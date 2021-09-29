@@ -8,10 +8,10 @@ import os
 
 
 if __name__ == '__main__':
-    filedir = '/media/palm/data/MicroAlgae/khonkan/ภาพใข่จากขอนแก่น-20201006T164426Z-001/images'
-    out_path = '/media/palm/BiggerData/algea/gfl_r50_kk_1'
+    filedir = '/media/palm/data/MicroAlgae/specificity'
+    out_path = '/media/palm/BiggerData/algea/predict_4/gfl_r50_kk_1'
 
-    cfg = Config.fromfile('/home/palm/PycharmProjects/pig/mmdetection/configs/gfl/gfl_r50_fpn_mstrain_2x_coco.py')
+    cfg = Config.fromfile('/home/palm/PycharmProjects/pig/mmdetection/configs/detr/detr_r50_8x2_150e_coco.py')
     if cfg.model.type == 'CascadeRCNN':
         if cfg.model.backbone.depth == 50:
             cfg.model.roi_head.bbox_head[0].num_classes = 2
@@ -23,7 +23,7 @@ if __name__ == '__main__':
         cfg.model.bbox_head.num_classes = 2
 
     # Build the detector
-    model = init_detector(cfg, '/media/palm/BiggerData/algea/weights/gfl_r50/epoch_24.pth', device='cuda')
+    model = init_detector(cfg, '/media/palm/BiggerData/algea/weights/detr_lab_4/epoch_30.pth', device='cuda')
     os.makedirs(out_path, exist_ok=True)
     for file in os.listdir(filedir):
         filename = os.path.join(filedir, file)

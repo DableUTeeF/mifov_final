@@ -1,15 +1,9 @@
-"""
-cascade: mAP using the weighted average of precisions among classes: 0.4544
-        ov: 0.9010
-        mif: 0.8108
-        mAP: 0.0007
-
-"""
 from mmdet.apis import inference_detector, init_detector
 from mmcv import Config
 import cv2
 import json
 import os
+from confusion_metrix import confusion_metrix
 
 if __name__ == '__main__':
     dataset = json.load(open('/home/palm/PycharmProjects/mmdetection/anns/test.json'))
@@ -75,7 +69,7 @@ if __name__ == '__main__':
          'vfnet_x101_dcn/epoch_22.pth',
          'vfnet_x101'),
     ]
-
+    output = {}
     for config, weight, name in configs:
         config = os.path.join(path[0], config)
         weight = os.path.join(path[1], weight)
@@ -93,40 +87,44 @@ if __name__ == '__main__':
 
         model = init_detector(cfg, weight, device='cuda')
 
-        # # JSON
-        # out_path = os.path.join(path[2], name, 'lab')
-        # os.makedirs(out_path, exist_ok=True)
-        # for idx, data in enumerate(dataset):
-        #     result = inference_detector(model, data['filename'])
-        #     img = model.show_result(data['filename'],
-        #                             result,
-        #                             score_thr=0.3, show=False)
-        #     # print(result)
-        #     cv2.imwrite(os.path.join(out_path,
-        #                              os.path.basename(data['filename'])),
-        #                 img)
-
-        # Folder
-        out_path = os.path.join(path[2], name)
+        # JSON
+        out_path = os.path.join(path[2], name, 'lab')
         os.makedirs(out_path, exist_ok=True)
-        total = 0
+
+        sensitve = {'mif': 0, 'ov': 0}
+        total = {'mif': 0, 'ov': 0}
+        false_alarm = {'mif': 0, 'ov': 0}
+
+        for idx, data in enumerate(dataset):
+            result = inference_detector(model, data['filename'])
+            cf = confusion_metrix(result, data['ann'], confidence_threshold=0.3, iou_threshold=0.5)
+            if data['ann']['labels'][0] == 0:
+                total['mif'] += 1
+            else:
+                total['ov'] += 1
+
+            if cf['mif']['mif'] > 0:
+                sensitve['mif'] += 1
+            elif cf['ov']['ov'] > 0:
+                sensitve['ov'] += 1
+
+            if cf['mif']['ov'] > 0 and cf['mif']['mif'] == 0:
+                false_alarm['ov'] += 1
+            elif cf['ov']['mif'] > 0 and cf['ov']['ov'] == 0:
+                false_alarm['mif'] += 1
+
         for idx, file in enumerate(os.listdir(filedir)):
             filename = os.path.join(filedir, file)
             image = cv2.imread(filename)
 
             # test a single image
             result = inference_detector(model, image)
-            r = [x[x[:, -1] > 0.3] for x in result]
-            t = sum([len(x) for x in r])
-            total += t
-            # show the results
-            img = model.show_result(filename,
-                                    result,
-                                    score_thr=0.3, show=False)
-            # print(result)
-            cv2.imwrite(os.path.join(out_path,
-                                      str(t) + f'_{idx:03d}' + '.png'
-                                     ),
-                        img)
-        with open(os.path.join(out_path, f'total_{total}.txt'), 'w') as wr:
-            wr.write(str(total))
+            mif_result = result[0][result[0][:, -1] > 0.3]
+            ov_result = result[1][result[1][:, -1] > 0.3]
+            if len(mif_result) > 0:
+                false_alarm['mif'] += 1
+            elif len(ov_result) > 0:
+                false_alarm['ov'] += 1
+
+        output[name] = {'sensitive': sensitve, 'false_alarm': false_alarm, 'total': total}
+    json.dump(output, open('sens_spec.json', 'w'))
