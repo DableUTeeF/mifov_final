@@ -18,10 +18,10 @@ if __name__ == '__main__':
         print('a')
 
         # predict
-        add_bbox(image, [657*s, 625*s, 706*s, 653*s], '0.9', (180, 0, 0), pos='bot', show_txt=False)
-        add_bbox(image, [656*s, 622*s, 705*s, 650*s], '0.7', (200, 180, 0), pos='bot', show_txt=False)
-        add_bbox(image, [654*s, 619*s, 703*s, 647*s], '0.5', (100, 100, 255), pos='bot', show_txt=False)
-        add_bbox(image, [649*s, 613*s, 700*s, 641*s], '0.3', (255, 50, 180), pos='bot', show_txt=False)
+        add_bbox(image, [658*s, 626*s, 706*s, 652*s], '0.9', (180, 0, 0), pos='bot', show_txt=False)
+        add_bbox(image, [658*s, 626*s, 700*s, 649*s], '0.7', (200, 180, 0), pos='bot', show_txt=False)
+        add_bbox(image, [658*s, 626*s, 694*s, 645*s], '0.5', (100, 100, 255), pos='bot', show_txt=False)
+        add_bbox(image, [658*s, 626*s, 688*s, 640*s], '0.3', (255, 50, 180), pos='bot', show_txt=False)
 
         # add annotation
 

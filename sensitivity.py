@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
         for idx, data in enumerate(dataset):
             result = inference_detector(model, data['filename'])
-            cf = confusion_metrix(result, data['ann'], confidence_threshold=0.3, iou_threshold=0.5)
+            cf = confusion_metrix(result, data['ann'], confidence_threshold=0.3, iou_threshold=0.7)
             if data['ann']['labels'][0] == 0:
                 total['mif'] += 1
             else:
@@ -108,9 +108,9 @@ if __name__ == '__main__':
             elif cf['ov']['ov'] > 0:
                 sensitve['ov'] += 1
 
-            if cf['mif']['ov'] > 0 and cf['mif']['mif'] == 0:
+            if cf['mif']['ov'] > 0:
                 false_alarm['ov'] += 1
-            elif cf['ov']['mif'] > 0 and cf['ov']['ov'] == 0:
+            elif cf['ov']['mif'] > 0:
                 false_alarm['mif'] += 1
 
         for idx, file in enumerate(os.listdir(filedir)):
@@ -127,4 +127,4 @@ if __name__ == '__main__':
                 false_alarm['ov'] += 1
 
         output[name] = {'sensitive': sensitve, 'false_alarm': false_alarm, 'total': total}
-    json.dump(output, open('sens_spec.json', 'w'))
+    json.dump(output, open('sens_spec_strict.json', 'w'))
